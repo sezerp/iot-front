@@ -13,7 +13,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 
-import { signin } from '../actions/login';
+import { signup } from '../actions/login';
 import fetchStatus from '../reducers/fetchStates';
 
 const styles = theme => ({
@@ -48,8 +48,8 @@ const styles = theme => ({
     },
   });
 
-class LoginForm extends Component {
-    state = { username: 'username', password: 'password' }
+class Register extends Component {
+    state = { username: 'username', password: 'password', accountName: '' }
 
     updateUsername = event => {
         this.setState({ username: event.target.value});
@@ -59,17 +59,15 @@ class LoginForm extends Component {
         this.setState({ password: event.target.value});
     }
 
-    signin = event => {
-        event.preventDefault();
- 
-        const { username, password } = this.state;
-        this.props.signin({ username, password });
+    updateCompanyName = event => {
+        this.setState({ accountName: event.target.value});
     }
 
-    get Error() {   
-        if ( this.props.login.status === fetchStatus.error) {
-            return <div>Invalid username or Password</div>
-        }
+    signup = event => {
+        event.preventDefault();
+ 
+        const { username, password, accountName } = this.state;
+        this.props.signup({ username, password, accountName });
     }
 
     render() {
@@ -82,7 +80,7 @@ class LoginForm extends Component {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in
+                    Register
                 </Typography>
                     <form className={classes.form}>
                     <FormControl margin="normal" required fullWidth>
@@ -94,6 +92,15 @@ class LoginForm extends Component {
                             autoFocus
                             value={this.state.username}
                             onChange={this.updateUsername}
+                        />
+                    </FormControl>
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="email">Company Name</InputLabel>
+                        <Input 
+                            id="companyname" 
+                            name="text" 
+                            value={this.state.accountName}
+                            onChange={this.updateCompanyName}
                         />
                     </FormControl>
                     <FormControl margin="normal" required fullWidth>
@@ -117,9 +124,9 @@ class LoginForm extends Component {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={this.signin}
+                        onClick={this.signup}
                     >
-                        Sign in
+                        Sign up
                     </Button>
                     </form>
                 </Paper>
@@ -130,4 +137,4 @@ class LoginForm extends Component {
 
 export default connect(
     ({ login }) => ({ login }), 
-    { signin })(withStyles(styles)(LoginForm));
+    { signup })(withStyles(styles)(Register));

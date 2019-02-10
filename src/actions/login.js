@@ -1,8 +1,9 @@
 import { BACKEND } from '../config';
 import { LOGIN } from './types';
 
-const LOGIN_ENDPOINT = '';
-const AUTHENTICATED_ENDPOINT = '/authenticated'
+const LOGIN_ENDPOINT = '/login';
+const REGISTER_ENDPOINT = '/register'
+const AUTHENTICATED_ENDPOINT = '/login/authenticated'
 
 export const fetchFromLogin = ({
     endpoint,
@@ -14,6 +15,7 @@ export const fetchFromLogin = ({
     dispatch({ type: FETCH_TYPE});
 
     return fetch(`${BACKEND.ADDRESS}${endpoint}/v1`, options)
+    .then(response => response.json())
     .then(json => {
         if (json.type === 'error') {
             dispatch({ type: ERROR_TYPE, message: json.message});
@@ -24,10 +26,10 @@ export const fetchFromLogin = ({
     .catch(error => dispatch({ type: ERROR_TYPE, message: error.message}));
 }
 
-export const login = ({ username, password }) => fetchFromLogin({
-    endpoint: AUTHENTICATED_ENDPOINT,
+export const signin = ({ username, password }) => fetchFromLogin({
+    endpoint: LOGIN_ENDPOINT,
     options: { 
-        credentials: LOGIN_ENDPOINT , 
+        credentials: true , 
         method: 'POST',
         body: JSON.stringify({ username, password }),
         headers: { 'Content-Type': 'application/json' },
@@ -35,7 +37,21 @@ export const login = ({ username, password }) => fetchFromLogin({
     },
     FETCH_TYPE: LOGIN.FETCH,
     ERROR_TYPE: LOGIN.FETCH_ERROR,
-    SUCCESS_TYPE: LOGIN.FETCH_AUTHENTICATED_SUCCESS
+    SUCCESS_TYPE: LOGIN.FETCH_SUCCESS
+});
+
+export const signup = ({ username, password, accountName }) => fetchFromLogin({
+    endpoint: REGISTER_ENDPOINT,
+    options: { 
+        credentials: true , 
+        method: 'POST',
+        body: JSON.stringify({ username, password, accountName }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+    },
+    FETCH_TYPE: LOGIN.FETCH,
+    ERROR_TYPE: LOGIN.FETCH_ERROR,
+    SUCCESS_TYPE: LOGIN.FETCH_SUCCESS
 });
 
 export const fetchAuthenticated = () => fetchFromLogin({

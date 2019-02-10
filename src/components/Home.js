@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import Device from './Device';
 
 class Home extends Component {
 
@@ -8,6 +9,7 @@ class Home extends Component {
         return (
             <div>
                 <h1>Home</h1>
+                <Device />
             </div>
         )
     }

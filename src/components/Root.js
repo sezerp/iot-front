@@ -6,14 +6,14 @@ import Home from './Home';
 
 class Root extends Component {
 
-
     render() {
         return (
-                 false ? <LoginForm/> : <Home />
+            this.props.login.loggedIn ? <Home /> :<LoginForm/>
         );
     }
 }
 
-// const componentConnector = connect();
-
-export default Root;
+export default connect(
+    ({ login }) => ({ login }),
+    null
+)(Root);
