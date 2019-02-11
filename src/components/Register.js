@@ -14,6 +14,8 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 
 import { signup } from '../actions/login';
+import TopBarPublic from './TopBarPublic';
+import Footer from './Footer';
 import fetchStatus from '../reducers/fetchStates';
 
 const styles = theme => ({
@@ -73,6 +75,8 @@ class Register extends Component {
     render() {
         const { classes } = this.props;
         return (
+            <div>
+            <TopBarPublic title="IoT" />
             <main className={classes.main}>
             <CssBaseline />
                 <Paper className={classes.paper} >
@@ -131,6 +135,8 @@ class Register extends Component {
                     </form>
                 </Paper>
             </main>
+            <Footer />
+            </div>
         );
     }
 }

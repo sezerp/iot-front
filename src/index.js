@@ -9,10 +9,11 @@ import thunk from 'redux-thunk';
 import Root from './components/Root'
 import rootReducer from './reducers';
 
-import AuthRoute from './components/AuthRoute';
 import { fetchAuthenticated } from './actions/login';
 import LoginForm from './components/LoginForm';
 import Register from './components/Register';
+import Home from './components/Home';
+import PricingPage from './components/PricingPage';
 
 
 const history = createBrowserHistory();
@@ -23,6 +24,14 @@ const store = createStore(
   composeEnhancer( applyMiddleware(thunk) )
   );
 
+const AuthRoute = props => {
+  if (! store.getState().login.loggedIn) {
+    return <Redirect to={{pathname: '/'}} />
+  }
+  const { path, component } = props;
+  return <Route path={ path } component={ component } />
+}
+
 store.dispatch(fetchAuthenticated())
 .then(() => {
   render(
@@ -31,7 +40,9 @@ store.dispatch(fetchAuthenticated())
         <Switch>
           <Route exact path="/" component={Root}/>
           <Route path="/register" component={Register}/>
-          <AuthRoute path="/login" component={LoginForm}/>
+          <Route path="/login" component={LoginForm}/>
+          <Route path="/pricing" component={PricingPage}/>
+          <AuthRoute path="/" component={Home}/>
         </Switch>
       </Router>
     </Provider>,
